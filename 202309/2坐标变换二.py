@@ -1,19 +1,20 @@
-from math import cos, sin
+from math import cos,sin
 
-n, m = map(int,input().strip().split())
-action = [list(map(float, input().split())) for _ in range(n)]
-position = [list(map(float, input().split())) for _ in range(m)]
-# print(action)
-# print(position)
-for i in range(m):   #遍历输入的坐标
-    for j in range(int(position[i][0]-1), int(position[i][1])):
-        temp = 0
-        if action[j][0] == 1:                            #1表示拉伸
-            position[i][2] *= action[j][1]
-            position[i][3] *= action[j][1]
-        if action[j][1] == 2:
-            temp = position[i][2]
-            position[i][2] = position[i][2]*cos(action[j][1]) - position[i][3]*sin(action[j][1])
-            position[i][3] = temp*sin(action[j][1]) + position[i][3]*cos(action[j][1])
-    print(round(position[i][2],3),round(position[i][3],3))
-
+n, m = map(int, input().strip().split())
+ki = [1]*10010
+xita = [0]*10010
+for i in range(1, n+1):
+    in_type = 0
+    in_value = 0
+    in_type, in_value = map(float, input().strip().split())
+    if in_type == 1:
+        ki[i] = ki[i-1] * in_value
+        xita[i] = xita[i-1]
+    else:
+        ki[i] = ki[i-1]
+        xita[i] = xita[i-1] + in_value
+for j in range(m):
+    l, r, x, y = map(float, input().strip().split())
+    ki_pro = ki[int(r)] / ki[int(l-1)]
+    Sita_pro = xita[int(r)] - xita[int(l-1)]
+    print((x*cos(Sita_pro)-y*sin(Sita_pro))*ki_pro, (x*sin(Sita_pro)+y*cos(Sita_pro))*ki_pro)
